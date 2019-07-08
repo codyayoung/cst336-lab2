@@ -3,7 +3,9 @@ var selectedWord = "";
 var selectedHint = "";
 var board = [];
 var remainingGuesses = 6;
-var words = ["snake", "monkey", "beetle"];
+var words = [{word: "snake", hint: "It's a reptile."}, 
+             {word: "monkey", hint: "It's a mammal."}, 
+             {word: "beetle", hint: "It's an insect."}];
 var alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
                 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
 
@@ -20,7 +22,8 @@ function startGame() {
 
 function pickWord() {
     var randomInt = Math.floor(Math.random() * words.length);
-    selectedWord = words[randomInt].toUpperCase();
+    selectedWord = words[randomInt].word.toUpperCase();
+    selectedHint = words[randomInt].hint;
 }
 
 function initBoard() {
@@ -40,9 +43,11 @@ function updateWord(positions, letter) {
 function updateBoard() {
     $("#word").empty();
 
-    for (var letter of board) {
-        document.getElementById("word").innerHTML += letter + " ";
+    for (var i=0; i < board.length; i++) {
+        $("#word").append(board[i] + " ");
     }
+
+    $("#word").append("<br />");
 }
 
 // Updates stick man image 
@@ -85,6 +90,12 @@ function createLetters() {
     }
 }
 
+// Disables button and tells user if disabled 
+function disableButton(btn) {
+    btn.prop("disabled", true);
+    btn.attr("class", "btn btn-danger");
+}
+
 // Ends game by hiding game divs and displaying win or loss messages
 function endGame(win) {
     $("#letters").hide();
@@ -105,8 +116,14 @@ $("#letterBtn").click(function(){
 
 $(".letter").click(function(){
     checkLetter($(this).attr("id"));
+    disableButton($(this));
 });
 
 $(".replayBtn").on("click", function(){
     location.reload();
+});
+
+$(".hintBtn").click(function(){
+    $("#word").append("<span class='hint'>Hint: " + selectedHint + "</span");
+    $(".hintBtn").hide();
 });
