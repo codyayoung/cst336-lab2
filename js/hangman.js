@@ -62,8 +62,19 @@ function checkLetter(letter) {
 
     if (positions.length > 0) {
         updateWord(positions, letter);
+
+        //Check to see if this is a winning guess 
+        if (!board.includes('_')) {
+            endGame(true);
+        }
+
     } else {
         remainingGuesses -=1;
+        updateMan();
+    }
+
+    if (remainingGuesses <= 0) {
+        endGame(false);
     }
 }
 
@@ -74,12 +85,28 @@ function createLetters() {
     }
 }
 
-// jQuery Functions
+// Ends game by hiding game divs and displaying win or loss messages
+function endGame(win) {
+    $("#letters").hide();
+
+    if (win) {
+        $('#won').show();
+    }
+    else {
+        $('#lost').show();
+    }
+}
+
+// jQuery Handlers
 $("#letterBtn").click(function(){
     var boxVal = $("#letterBox").val();
     console.log("You pressed the button and it had the value: " + boxVal);
-})
+});
 
 $(".letter").click(function(){
     checkLetter($(this).attr("id"));
+});
+
+$(".replayBtn").on("click", function(){
+    location.reload();
 });
