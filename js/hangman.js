@@ -12,9 +12,15 @@ window.onload = startGame();
 
 // Functions
 function startGame() {
+    createLetters();
     pickWord();
     initBoard();
     updateBoard();
+}
+
+function pickWord() {
+    var randomInt = Math.floor(Math.random() * words.length);
+    selectedWord = words[randomInt].toUpperCase();
 }
 
 function initBoard() {
@@ -23,24 +29,25 @@ function initBoard() {
     }
 }
 
-function pickWord() {
-    var randomInt = Math.floor(Math.random() * words.length);
-    selectedWord = words[randomInt].toUpperCase;
-}
-
 // Update current word, then update board
-function updateWord() {
+function updateWord(positions, letter) {
     for (var pos of positions) {
         board[pos] = letter;
     }
-
     updateBoard();
 }
 
 function updateBoard() {
+    $("#word").empty();
+
     for (var letter of board) {
         document.getElementById("word").innerHTML += letter + " ";
     }
+}
+
+// Updates stick man image 
+function updateMan() {
+    $("#hangImg").attr("src", "img/stick_" + (6 - remainingGuesses) + ".png");
 }
 
 // Checks to see if selected letter exists in the selected word 
@@ -48,7 +55,6 @@ function checkLetter(letter) {
     var positions = new Array();
 
     for (var i = 0; i < selectedWord.length; i++) {
-        console.log(selectedWord)
         if (letter == selectedWord[i]) {
             positions.push(i);
         }
@@ -56,8 +62,7 @@ function checkLetter(letter) {
 
     if (positions.length > 0) {
         updateWord(positions, letter);
-    }
-    else {
+    } else {
         remainingGuesses -=1;
     }
 }
@@ -72,10 +77,9 @@ function createLetters() {
 // jQuery Functions
 $("#letterBtn").click(function(){
     var boxVal = $("#letterBox").val();
-    console.log("You presed the button and it had the value: " + boxVal);
+    console.log("You pressed the button and it had the value: " + boxVal);
 })
 
-$(".letter").click(function() {
+$(".letter").click(function(){
     checkLetter($(this).attr("id"));
-})
-
+});
