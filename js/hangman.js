@@ -109,11 +109,6 @@ function endGame(win) {
 }
 
 // jQuery Handlers
-$("#letterBtn").click(function(){
-    var boxVal = $("#letterBox").val();
-    console.log("You pressed the button and it had the value: " + boxVal);
-});
-
 $(".letter").click(function(){
     checkLetter($(this).attr("id"));
     disableButton($(this));
