@@ -125,5 +125,7 @@ $(".replayBtn").on("click", function(){
 
 $(".hintBtn").click(function(){
     $("#word").append("<span class='hint'>Hint: " + selectedHint + "</span");
+    remainingGuesses -= 1;
+    updateMan();
     $(".hintBtn").hide();
 });
